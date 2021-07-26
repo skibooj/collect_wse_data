@@ -1,1 +1,1 @@
-# gpw
+# GPW data gathering
