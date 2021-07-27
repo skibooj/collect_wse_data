@@ -12,7 +12,7 @@ requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 # create range of date in certain format
-range_of_date=pd.date_range(start="07/01/2021",end="7/31/2021")
+range_of_date=pd.date_range(start="07/01/2021",end="7/31/2021",freq="B") # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases
 dates_to_download = range_of_date.strftime("%Y-%m-%d").tolist()
 
 # type to download
