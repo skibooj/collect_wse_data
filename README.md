@@ -1,1 +1,5 @@
-# GPW data gathering
+# Stock data gathering
+
+## Description
+
+## Setup Guide
