@@ -1,7 +1,6 @@
 import os
 import requests
 import urllib3
-import time
 import pandas as pd
 from datetime import date, datetime
 from pandas.core.indexes.datetimes import date_range
@@ -10,9 +9,12 @@ from pandas.core.indexes.datetimes import date_range
 # settings that skip warnings
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+###
+
+
 
 # create range of date in certain format
-range_of_date=pd.date_range(start="07/01/2021",end="7/31/2021",freq="B") # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases
+range_of_date=pd.date_range(start="07/01/2021",end="7/31/2021",freq="B") 
 dates_to_download = range_of_date.strftime("%Y-%m-%d").tolist()
 
 # type to download
@@ -37,8 +39,10 @@ dates_to_download = range_of_date.strftime("%Y-%m-%d").tolist()
 
 
 
+#create directory if not exist
+
 for each_dates in dates_to_download:
-    type_to_download = "1"
+    type_to_download = "10"
     url = f"https://www.gpw.pl/archiwum-notowan?fetch=1&type={type_to_download}&instrument=&date={each_dates}"
     resp = requests.get(url, verify=False)
     file_name = each_dates
@@ -48,17 +52,6 @@ for each_dates in dates_to_download:
 
 
 
-
-# df = pd.DataFrame()
-# for file in sheets:
-#      if file.endswith('.xlsx'):
-#          df = df.append(pd.read_excel(file), ignore_index=True) 
-# df.head()
-
-
-
-
-
 #if __name__ == "__main__":
-# run function   
+#    pass
     
