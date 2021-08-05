@@ -9,9 +9,6 @@ from pandas.core.indexes.datetimes import date_range
 # settings that skip warnings
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-###
-
-
 
 # create range of date in certain format
 range_of_date=pd.date_range(start="07/01/2021",end="7/31/2021",freq="B") 

@@ -23,7 +23,7 @@ for file in sheets:
 
 
 pd.DataFrame(error_list).to_excel(f'{current_date}_error_logs.xlsx')
-final_data.to_excel('dupa.xlsx')
+final_data.to_excel('final_date{kind_of_element}.xlsx')
 
 
 
