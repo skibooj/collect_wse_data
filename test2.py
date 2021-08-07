@@ -1,66 +1,49 @@
 import pandas as pd
+from pandas.core.base import DataError
 import requests
+import os.path
 
 
-# settings that skip warnings
+
+# settings that skip warnings about risky connection
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 
-
-def list_of_dates(period_start=None,period_end=None) -> list:
+# freq argument
+def list_of_dates(period_start: str = None,period_end: str = None) -> list:
     range_of_dates=pd.date_range(start=period_start,end=period_end,freq="B") 
     dates_to_download = range_of_dates.strftime("%Y-%m-%d").tolist() 
     return dates_to_download
 
 
 
+def download_gpw1(
+    dates_list: list=None,
+    financial_instument: str=None):
+    
+    """
+    Download excel files to D_data folder and create seperate folder for current financial instrument 
+    
+    return: None
+    """
+    source_path = os.path.dirname(os.path.abspath(__file__))
+    final_directory = f"{source_path}/D_data/{financial_instument}"
+    
+    if not os.path.exists(final_directory):
+        os.mkdir(final_directory)
 
-def download_gpw(dates_list=None,
-    financial_instument=None,
-    file_destination=None
-):
-    """
-    start - period start 
-    end -   period end
-    fin_in - which financial instrument do you want to download
-    dest - where save final 
-    """
-    # dodac sciezke tak zeby dzialala na wielu platformach win/linux/macos
-    # 
-    for each_dates in dates_list:
-        type_to_download = financial_instument
-        url = f"https://www.gpw.pl/archiwum-notowan?fetch=1&type={type_to_download}&instrument=&date={each_dates}"
+
+    for each_date in dates_list:
+        url = f"https://www.gpw.pl/archiwum-notowan?fetch=1&type={financial_instument}&instrument=&date={each_date}"
         resp = requests.get(url, verify=False)
-        file_name = each_dates
-
-        with open(f'/home/skibooj/work/gpw/{file_destination}/{type_to_download}/{file_name}.xls', 'wb') as output:
+        file_name = each_date
+        with open(f"{final_directory}/{file_name}.xls", 'wb') as output:
                 output.write(resp.content) 
-
     pass
  
 
 
-
-# merge data function
-def merge_output_file(final_name='',
-                          directory=''):
-        """
-        
-        """
-        pass
-
-def merge_gpw_data(
-    financial_instrument=None,
-    final_directory=None):
-    pass
-
-def import_data_gpw():
-    pass
-
-
 if __name__ == "__main__":
-    pass
-    
-    #data = list_of_date(period_start="07/01/2021",period_end="07/10/2021")
-    #download_gpw(data,"10","D_data")
+    #data = list_of_dates("01/01/2019","08/31/2021")
+    #download_gpw1(data,"10")

@@ -1,3 +1,5 @@
 D_data
-
+test*.py
+*.xlsx
 todo.txt
+*.sql
