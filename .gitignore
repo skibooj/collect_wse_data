@@ -1,5 +1,12 @@
 D_data
-test*.py
+test*
+test.py
 *.xlsx
 todo.txt
 *.sql
+
+#Ignore all xlsx files
+*.xlsx
+
+#Ignore all pdf file
+*.pdf
