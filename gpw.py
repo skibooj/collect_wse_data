@@ -11,19 +11,17 @@ requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 
-
-
 def list_of_dates(period_start: str = None,period_end: str = None) -> list:
     
     """
     data shoud have format: dd/mm/yyyy
     """
 
-    ps = datetime.datetime.strptime(period_start, "%d/%m/%Y").strftime("%m-%d-%Y")
-    pe = datetime.datetime.strptime(period_end, "%d/%m/%Y").strftime("%m-%d-%Y")
+    ps = datetime.strptime(period_start, "%d/%m/%Y").strftime("%m-%d-%Y")
+    pe = datetime.strptime(period_end, "%d/%m/%Y").strftime("%m-%d-%Y")
 
     # frequency is a constant because stock exchange work only in a workdays
-    range_of_dates=pd.date_range(start=period_start,end=period_end,freq="B")
+    range_of_dates=pd.date_range(start=ps,end=pe,freq="B")
     dates_to_download = range_of_dates.strftime("%d-%m-%Y").tolist() 
     return dates_to_download
 
@@ -100,6 +98,6 @@ def merge_data(financial_instrument: str= None):
 
 
 
-#if __name__ == "__main__":
-#    pass
-    
+if __name__ == "__main__":
+    data = list_of_dates("01/08/2021",'10/08/2021')
+    print(data)
