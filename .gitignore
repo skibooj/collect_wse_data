@@ -1,12 +1,8 @@
 D_data
 test*
-test.py
-*.xlsx
 todo.txt
 *.sql
 *.txt
-#Ignore all xlsx files
 *.xlsx
+*.csv
 
-#Ignore all pdf file
-*.pdf
