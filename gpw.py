@@ -9,12 +9,10 @@ import glob
 
 
 def list_of_dates(period_start: str = None,period_end: str = None) -> list:
-    
     """
     data shoud have format: dd/mm/yyyy
     """
-    print(period_start)
-    print(period_end)
+    
     ps = datetime.strptime(period_start, "%d/%m/%Y").strftime("%m-%d-%Y")
     pe = datetime.strptime(period_end, "%d/%m/%Y").strftime("%m-%d-%Y")
 
@@ -41,20 +39,19 @@ def gpw_download(
             url = f"https://www.gpw.pl/archiwum-notowan?fetch=1&type={each_instrument}&instrument=&date={each_date}"
             print(url)
             resp = requests.get(url, verify=False)
-            file_name = each_date
-            with open(f"{final_directory}/{file_name}.xls", 'wb') as output: #change to pathlib
-                output.write(resp.content) 
+            file_name = Path(final_directory,str(each_date + '.xls')
+            with file_name.open(mode ='wb') as output:
+                output.write(resp.content)
     pass
 
 
-def merge_data(kind_of_element: str= None):    
+def merge_data(kind_of_element: str= None): #financial_instrument 
     files_list = glob.glob(f"./D_data/{kind_of_element}/*") #change to pathlib
     final_data = pd.DataFrame()
     error_list = []
     current_date = pd.to_datetime("today").strftime("%d-%m-%Y")
 
 
-    #rewrite this loop
     for file in files_list:
         if file.endswith('.xls'):
             try:
@@ -63,8 +60,9 @@ def merge_data(kind_of_element: str= None):
                 print(f"{file} --- Error: there was an error")
                 error_list.append(file)
     
-    pd.DataFrame(error_list).to_excel(f'{current_date}_error_logs_{kind_of_element}.xlsx')
-    final_data.to_csv(f'{current_date}_final_date_{kind_of_element}.csv')
+    # add time to name of file 
+    pd.DataFrame(error_list).to_excel(f"{current_date}_error_logs_{kind_of_element}.xlsx")
+    final_data.to_csv(f"{current_date}_final_date_{kind_of_element}.csv")
     
     pass 
 
@@ -75,7 +73,10 @@ def import_data(
 ) -> None:
     pass
 
-
+def clear_data() -> None:                 
+    pass 
+                             
+                                                  
 if __name__ == "__main__":
     #test
     dates = list_of_dates('01/01/2021','10/01/2021')
