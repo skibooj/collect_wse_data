@@ -36,12 +36,17 @@ def gpw_download(
             os.mkdir(final_directory)
 
         for each_date in dates_list:
-            url = f"https://www.gpw.pl/archiwum-notowan?fetch=1&type={each_instrument}&instrument=&date={each_date}"
-            print(url)
-            resp = requests.get(url, verify=False)
-            file_name = Path(final_directory,str(each_date + '.xls')
+          
+            base_url ='https://www.gpw.pl/archiwum-notowan'
+            url_params = {'fetch':'1',
+                      'type':each_instrument,
+                      'date':each_date}
+            
+            resp = requests.get(base_url, params=url_params verify=False)
+            file_name = Path(final_directory, str(each_date + '.xls')
             with file_name.open(mode ='wb') as output:
                 output.write(resp.content)
+                             
     pass
 
 
@@ -76,11 +81,12 @@ def import_data(
 def clear_data() -> None:                 
     pass 
                              
-                                                  
+                             
+                             
 if __name__ == "__main__":
     #test
     dates = list_of_dates('01/01/2021','10/01/2021')
-    ins_to_download = ['1','10','13']
-    gpw_download(dates,ins_to_download)
-    for x in ins_to_download:
-        merge_data(x)
+    instruments_to_download = ['1','10','13']
+    gpw_download(dates,instruments_to_download)
+    for element in instruments_to_download:
+        merge_data(element)
