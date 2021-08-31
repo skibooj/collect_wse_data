@@ -42,8 +42,9 @@ def gpw_download(
                       'type':each_instrument,
                       'date':each_date}
             
-            resp = requests.get(base_url, params=url_params verify=False)
-            file_name = Path(final_directory, str(each_date + '.xls')
+            resp = requests.get(base_url, params=url_params, verify=False)
+            file_name = Path(final_directory, str(each_date + '.xls'))
+
             with file_name.open(mode ='wb') as output:
                 output.write(resp.content)
                              
