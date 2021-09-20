@@ -1,5 +1,5 @@
 # Stock data gathering
 
-## Description
+### Description
 
-## Setup Guide
+### Setup Guide

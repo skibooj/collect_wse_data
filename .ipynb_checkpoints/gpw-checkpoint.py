@@ -3,7 +3,7 @@ from pathlib import Path
 from pandas.core.frame import DataFrame
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import date, datetime
 from pandas.core.indexes.datetimes import date_range
 import glob
 
@@ -71,9 +71,9 @@ def merge_data(kind_of_element: str= None): #financial_instrument
                 print(f"{file} --- Error: there was an error")
                 error_list.append(file)
     
-    #change to path and change to txt
-    pd.DataFrame(error_list).to_csv(f"./error_logs/{current_date}_error_logs_{kind_of_element}.csv")
-    final_data.to_csv(f"./merged_files/{current_date}_merged_data_{kind_of_element}.csv", index= False)
+    # add time to name of file 
+    pd.DataFrame(error_list).to_excel(f"{current_date}_error_logs_{kind_of_element}.xlsx")
+    final_data.to_csv(f"{current_date}_final_date_{kind_of_element}.csv", index= False)
     
     pass 
 
@@ -84,22 +84,19 @@ def import_data(
 ) -> None:
     pass
 
+def clear_data() -> None:                 
+    pass 
+                                             
 
-def detele_data(file_name: str=None) -> None:
-    if file_name == None:
-        file_name = "D_data"
-    
-    pass                                         
-
-def gpw_data_preparation(file_name: str) -> None:
+def data_preparation(file_name: str) -> None:
     """
-    prepare data to import to database
     change columns names and data types 
     """
     a = pd.read_csv(file_name)
     #change column name
     #set desired format
     pass
+
 
 
 if __name__ == "__main__":

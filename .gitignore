@@ -1,8 +1,11 @@
 D_data
+merged_files
+error_logs
 test*
 todo.txt
 *.sql
 *.txt
 *.xlsx
 *.csv
+database.ini
 
