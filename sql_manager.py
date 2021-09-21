@@ -17,26 +17,25 @@ def config(section,filename='database.ini',):
     return db
 
 
-dbParams = config("postgresql")
-
-con = psycopg2.connect(**dbParams)
-con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+def gpw_import() -> None:
+    pass
 
 
-cur = con.cursor()
+if __name__ == "__main__":
+    
+    dbParams = config("postgresql")
+    con = psycopg2.connect(**dbParams)
+    con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
-
-
-
-aaa = "select * from stock_fact2"
-b ="""
-SELECT count(*) FROM stock_fact2;
-"""
-cur.execute(b)
-
-print(cur.fetchall())
-
-cur.close()
-con.close()
+    cur = con.cursor()
+    
+    query ="""
+    SELECT count(*) FROM stock_fact2;
+    """
+    cur.execute(query)
+    print(cur.fetchall())
+    
+    cur.close()
+    con.close()
 
 

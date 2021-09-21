@@ -78,27 +78,40 @@ def merge_data(kind_of_element: str= None): #financial_instrument
     pass 
 
 
-def import_data(
-    file_name: str =None,
-    financial_instrument: str =None
-) -> None:
-    pass
-
-
 def detele_data(file_name: str=None) -> None:
     if file_name == None:
         file_name = "D_data"
     
     pass                                         
 
-def gpw_data_preparation(file_name: str) -> None:
-    """
-    prepare data to import to database
-    change columns names and data types 
-    """
-    a = pd.read_csv(file_name)
-    #change column name
-    #set desired format
+def gpw_data_preparation(file_name: str, final_directory: str=None) -> None:
+ 
+    if final_directory ==None:
+        final_directory="./"
+
+    data = pd.read_csv(file_name)
+    data = data.rename(columns={'Data':'date',
+                            'Nazwa':'symbol',
+                            'Waluta':'currency',
+                            'Kurs otwarcia':'open',
+                            'Kurs max':'max',
+                            'Kurs min':'min',
+                            'Kurs zamknięcia':'close',
+                            'Zmiana':'%change',
+                            'Wolumen':'quantity',
+                            'Liczba Transakcji':'number of transactions',
+                            'Obrót':'volume',
+                            'Liczba otwartych pozycji':'number of open positions',
+                            'Wartość otwartych pozycji':'value of open positions',
+                            'Cena nominalna': 'nominal price',
+                           })
+    data['volume'] = data['volume'].apply(lambda x: x*1000)
+    data['date']= pd.to_datetime(data['date'])
+    
+    
+    final_name = Path(file_name).stem + '_ready_to_import.csv'
+    path_to_save = Path(final_directory,Path(file_name).stem + '_ready_to_import.csv')
+    data.to_csv(path_to_save,index=False)
     pass
 
 
