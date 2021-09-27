@@ -1,15 +1,20 @@
-CREATE TABLE "public.stock_fact" (
-	"date" DATE NOT NULL,
-	"company_id" int NOT NULL,
-	"stock_id" int NOT NULL,
-	"finInst_id" int NOT NULL,
-	"open_price" numeric(4) NOT NULL,
-	"close_price" numeric(4) NOT NULL,
-	"max_price" numeric(4) NOT NULL,
-	"min_price" numeric(4) NOT NULL,
-	"price_change_percentage" numeric(4) NOT NULL,
-	"volume" int NOT NULL,
-	"transactions" int NOT NULL
+CREATE TABLE IF NOT EXISTS public.stock_fact4
+(
+    date date,
+    symbol character varying(50) COLLATE pg_catalog."default",
+    "ISIN" character varying(50) COLLATE pg_catalog."default",
+    currency character varying(3) COLLATE pg_catalog."default",
+    open numeric,
+    max numeric,
+    min numeric,
+    close numeric,
+    "%change" numeric,
+    quantity integer,
+    num_of_trans integer,
+    volume numeric,
+    num_of_o_pos integer,
+    vol_of_o_pos integer,
+    nominal_price integer
 ) WITH (
   OIDS=FALSE
 );

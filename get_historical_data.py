@@ -1,14 +1,27 @@
-# fir
+import requests
+import gpw
 
-def main() -> None:
-    data = 'ss'
-    istr = ['1','2','4']
+
+# settings that skip warnings
+requests.packages.urllib3.disable_warnings()
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+
+
+def main () -> None:
+
+    
+    instruments_to_download = ["1","10"]
+    date_range = gpw.list_of_dates(period_start='01/01/2015',period_end='01/09/2021')
+    gpw.download_gpw(date_range,instruments_to_download)
+    for element in instruments_to_download:
+        gpw.merge_data(element)
+    
     pass
-    #init variable like data / stuff
-    #import all data
-    #clear data
+
+
 
 
 if __name__ == "__main__":
     main()
+
     
