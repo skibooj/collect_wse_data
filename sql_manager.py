@@ -14,8 +14,9 @@ def config(section,filename='database.ini',):
             db[param[0]] = param[1]
     else:
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
-
+        
     return db
+
 
 def connect_to_database():
     try:
@@ -38,11 +39,26 @@ def take_last_date_gpw(table_name:str=None) -> str:
     cur.execute(query)
     data = cur.fetchall()
     con.close()
-    data = data[0][0].strftime("%d/%m/%Y")
+    data = data[0][0].strftime("%d/%m/%Y") #fetchall data is a nested tuple in a list
     return data
 
 
+def bulk_insert(file_path:str = None,table_name:str=None):
+    con = connect_to_database()
+    cur = con.cursor()   
+    query = f"""
+            COPY {table_name}
+            FROM '{file_path}' 
+            DELIMITER ',' 
+            CSV HEADER;
+            """
+    cur.execute(query)
+    con.close()
+    pass
+
+
 if __name__ == "__main__":
-    #a = take_last_date_gpw("gpw_facts")[0].strftime("%d/%m/%Y")
-    #print(a)
+    #demo
+    a = take_last_date_gpw("gpw_facts")
+    print(a)
     pass
