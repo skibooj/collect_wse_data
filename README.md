@@ -1,4 +1,4 @@
-# Stock data gathering
+# Warsaw Stock Exchange (GPW) data gathering  
 
 ## Description
 
