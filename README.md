@@ -1,6 +1,6 @@
 # Stock data gathering
 
-### Description
+## Description
 
 ## Setup Guide
 #### project setup
