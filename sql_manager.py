@@ -28,6 +28,36 @@ def connect_to_database():
         print ("I am unable to connect to the database")
 
 
+def create_table(table_name:str=None) -> None:
+    con = connect_to_database()
+    cur = con.cursor()   
+    query = f""" #add create table if not exist
+            CREATE TABLE "{table_name}" ( 
+            "date" date,
+            "symbol" VARCHAR(50),
+            "ISIN" VARCHAR(50),
+            "currency" VARCHAR(3),
+            "open" decimal,
+            "max" decimal,
+            "min" decimal,
+            "close" decimal,
+            "%change" decimal,
+            "quantity" int,
+            "num_of_trans" int,
+            "volume" decimal,
+            "num_of_o_pos" int,
+            "vol_of_o_pos" int,
+            "nominal_price" int
+                ) WITH (
+              OIDS=FALSE
+            );
+        """
+    cur.execute(query)
+    con.close()
+    pass
+
+
+    pass
 def take_last_date_gpw(table_name:str=None) -> str:
     """
     take last date from 
@@ -55,6 +85,15 @@ def bulk_insert(file_path:str = None,table_name:str=None):
     cur.execute(query)
     con.close()
     pass
+
+
+def select_gpw_data(table_name:str=None) -> list:
+    con = connect_to_database()
+    cur = con.cursor()   
+    query = f"select * from {table_name};"
+    cur.execute(query)
+    con.close()
+    return data   
 
 
 if __name__ == "__main__":
