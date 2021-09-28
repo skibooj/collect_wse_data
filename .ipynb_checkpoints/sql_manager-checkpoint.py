@@ -1,9 +1,8 @@
 
-from pandas.core.frame import DataFrame
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
 import configparser
-import pandas as pd
+
 
 def config(section,filename='database.ini',):
     parser = configparser.ConfigParser()
@@ -58,7 +57,7 @@ def create_table(table_name:str=None) -> None:
     pass
 
 
-    
+    pass
 def take_last_date_gpw(table_name:str=None) -> str:
     """
     take last date from 
@@ -88,13 +87,13 @@ def bulk_insert(file_path:str = None,table_name:str=None):
     pass
 
 
-def select_gpw_data() -> DataFrame:
-    query = """
-    select * from gpw_facts;
-    """
+def select_gpw_data(table_name:str=None) -> list:
     con = connect_to_database()
-    data = pd.read_sql_query(query,con)
-    return data
+    cur = con.cursor()   
+    query = f"select * from {table_name};"
+    cur.execute(query)
+    con.close()
+    return data   
 
 
 if __name__ == "__main__":
