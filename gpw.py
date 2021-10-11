@@ -56,25 +56,35 @@ def gpw_download(
     pass
 
 
-def merge_data(kind_of_element: str= None): #financial_instrument 
-    files_list = glob.glob(f"./D_data/{kind_of_element}/*") #change to pathlib
+def merge_data(folder_dir: str = None): 
+    
+    if folder_dir == None:
+        folder_dir = 'D_data'
+
+    path_to_check = Path(f'./{folder_dir}/')
+    list_of_folders = [x for x in path_to_check.iterdir() if x.is_dir()]
+    
     final_data = pd.DataFrame()
     error_list = []
-    current_date = pd.to_datetime("today").strftime("%d-%m-%Y")
+    current_date = pd.to_datetime("today").strftime("%Y-%m-%d")
 
+    for financial_instrument in list_of_folders:
 
-    for file in files_list:
-        if file.endswith('.xls'):
+        files_list = financial_instrument.glob('*.xls')
+
+        for file in files_list:
             try:
                 final_data = final_data.append(pd.read_excel(file), ignore_index=True)
             except ValueError:
                 print(f"{file} --- Error: there was an error")
                 error_list.append(file)
-    
-    #change to path and change to txt
-    pd.DataFrame(error_list).to_csv(f"./error_logs/{current_date}_error_logs_{kind_of_element}.csv")
-    final_data.to_csv(f"./merged_files/{current_date}_merged_data_{kind_of_element}.csv", index= False)
-    
+        
+        #>>financial_instrument.parts[1] output: instrument number
+        error_file_path = f"{current_date}_error_logs_{financial_instrument.parts[1]}.csv" 
+        final_file_path = f"{current_date}_merged_data_{financial_instrument.parts[1]}.csv"
+        pd.DataFrame(error_list).to_csv(Path('./error_logs/',error_file_path))
+        final_data.to_csv(Path('./merged_files/',final_file_path), index= False)
+        
     pass 
 
 
@@ -118,10 +128,11 @@ def gpw_data_preparation(file_name: str, final_directory: str=None) -> None:
 if __name__ == "__main__":
     #test
     #dates = list_of_dates('01/01/2019','07/09/2021')
-    instruments_to_download = ['10']
-    #gpw_download(dates,instruments_to_download)
-    for element in instruments_to_download:
-        merge_data(element)
+    # instruments_to_download = ['10']
+    # gpw_download(dates,instruments_to_download)
+    # for element in instruments_to_download:
+    #     merge_data(element)
+    merge_data()
 
 
 
