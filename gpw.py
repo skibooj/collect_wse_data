@@ -20,7 +20,7 @@ def list_of_dates(period_start: str = None,period_end: str = None) -> list:
     
     ps = datetime.strptime(period_start, "%d/%m/%Y").strftime("%m-%d-%Y")
     pe = datetime.strptime(period_end, "%d/%m/%Y").strftime("%m-%d-%Y")
-
+    
     # freq argument is a constant because stock exchange work only in a workdays
     range_of_dates=pd.date_range(start=ps,end=pe,freq="B")
     dates_to_download = range_of_dates.strftime("%d-%m-%Y").tolist() 
@@ -94,12 +94,14 @@ def detele_data(file_name: str=None) -> None:
     
     pass                                         
 
-def gpw_data_preparation(file_name: str, final_directory: str=None) -> None:
+# test this function
+def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_directory: str=None) -> None:
  
     if final_directory ==None:
         final_directory="./"
 
     data = pd.read_csv(file_name)
+    data['financial_inst'] = finacial_instrument
     data = data.rename(columns={'Data':'date',
                             'Nazwa':'symbol',
                             'Waluta':'currency',
@@ -117,9 +119,11 @@ def gpw_data_preparation(file_name: str, final_directory: str=None) -> None:
                            })
     data['volume'] = data['volume'].apply(lambda x: x*1000)
     data['date']= pd.to_datetime(data['date'])
+    data = data.loc[:, ['date','financial_inst','symbol','currency','open',
+                        'max','min','close','%change','quantity',
+                        'number of transactions','volume','number of open positions',
+                        'value of open positions','nominal price',]]
     
-    
-    final_name = Path(file_name).stem + '_ready_to_import.csv'
     path_to_save = Path(final_directory,Path(file_name).stem + '_ready_to_import.csv')
     data.to_csv(path_to_save,index=False)
     pass

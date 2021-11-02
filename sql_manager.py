@@ -58,7 +58,7 @@ def create_table(table_name:str=None) -> None:
     pass
 
 
-    
+#change name to get_last_date
 def take_last_date_gpw(table_name:str=None) -> str:
     """
     take last date from 
@@ -96,6 +96,12 @@ def select_gpw_data() -> DataFrame:
     data = pd.read_sql_query(query,con)
     return data
 
+
+def get_holidays(stock_name) -> DataFrame:
+    query = f"""select holiday from stock_holiday where stock_name = "{stock_name}";"""
+    con = connect_to_database()
+    data = pd.read_sql_query(query,con)
+    return data
 
 if __name__ == "__main__":
     #demo
