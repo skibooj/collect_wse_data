@@ -1,7 +1,7 @@
 import requests
 import gpw
-import sql_manager
-
+import stockDB_manager
+import tools
 # settings that skip warnings
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
@@ -9,14 +9,15 @@ requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 def main () -> None:
 
-    
-    last_day = sql_manager.take_last_date_gpw("gpw_facts")
+    gpw.clear_data()
+    last_day = stockDB_manager.take_last_date('stock.stg_gpw')
+    today = tools.current_date()
+    list_to_download = tools.list_of_dates(last_day,today) #change to tools.list_of_dates
     instruments_to_download = ["1","10"]
-    # gpw.download_gpw(last_day,instruments_to_download)
-    # for element in instruments_to_download:
-    #     gpw.merge_data(element)
-    # gpw.gpw_data_preparation()
-    
+    #gpw.check_conection if true downlad if not
+    #gpw.get_downloaded_dates()
+    gpw.gpw_download(list_to_download,instruments_to_download)
+    gpw.merge_data()
     pass
 
 

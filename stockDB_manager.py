@@ -29,44 +29,14 @@ def connect_to_database():
         print ("I am unable to connect to the database")
 
 
-def create_table(table_name:str=None) -> None:
-    con = connect_to_database()
-    cur = con.cursor()   
-    query = f""" #add create table if not exist
-            CREATE TABLE "{table_name}" ( 
-            "date" date,
-            "symbol" VARCHAR(50),
-            "ISIN" VARCHAR(50),
-            "currency" VARCHAR(3),
-            "open" decimal,
-            "max" decimal,
-            "min" decimal,
-            "close" decimal,
-            "%change" decimal,
-            "quantity" int,
-            "num_of_trans" int,
-            "volume" decimal,
-            "num_of_o_pos" int,
-            "vol_of_o_pos" int,
-            "nominal_price" int
-                ) WITH (
-              OIDS=FALSE
-            );
-        """
-    cur.execute(query)
-    con.close()
-    pass
-
-
-#change name to get_last_date
-def take_last_date_gpw(table_name:str=None) -> str:
+def take_last_date(stock_name:str=None) -> str:
     """
-    take last date from 
+    take last dowloaded date for certain stock name
     """
     con = connect_to_database()
     cur = con.cursor()
     
-    query =f"select distinct date from {table_name} order by date desc limit 1;"
+    query =f"select distinct date from stock.{stock_name} order by date desc limit 1;"
     cur.execute(query)
     data = cur.fetchall()
     con.close()
@@ -90,7 +60,7 @@ def bulk_insert(file_path:str = None,table_name:str=None):
 
 def select_gpw_data() -> DataFrame:
     query = """
-    select * from gpw_facts;
+    select * from stock.stg_gpw;
     """
     con = connect_to_database()
     data = pd.read_sql_query(query,con)
@@ -105,6 +75,6 @@ def get_holidays(stock_name) -> DataFrame:
 
 if __name__ == "__main__":
     #demo
-    a = take_last_date_gpw("gpw_facts")
+    a = select_gpw_data()
     print(a)
     pass

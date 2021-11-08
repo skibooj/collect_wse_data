@@ -11,6 +11,7 @@ def main () -> None:
 
     
     instruments_to_download = ["1","10"]
+    
     date_range = gpw.list_of_dates(period_start='01/01/2010',period_end='01/09/2021')
     gpw.download_gpw(date_range,instruments_to_download)
     for element in instruments_to_download:
