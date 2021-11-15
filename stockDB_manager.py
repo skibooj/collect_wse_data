@@ -4,7 +4,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
 import configparser
 import pandas as pd
-
+import numpy as np
 def config(section,filename='database.ini',):
     parser = configparser.ConfigParser()
     parser.read(filename)
@@ -68,13 +68,19 @@ def select_gpw_data() -> DataFrame:
 
 
 def get_holidays(stock_name) -> DataFrame:
-    query = f"""select holiday from stock_holiday where stock_name = "{stock_name}";"""
+    query = f"""select fact_stock_holidays.date from fact_stock_holidays inner join dim_stock
+                on fact_stock_holidays.stock_id = dim_stock.stock_id
+                where dim_stock.stock_name = '{stock_name}';"""
     con = connect_to_database()
     data = pd.read_sql_query(query,con)
-    return data
+    data = data.astype({'date': 'datetime64[ns]'})
+    return list(data['date'])
+
+
+
 
 if __name__ == "__main__":
     #demo
-    a = select_gpw_data()
+    a = get_holidays('GPW')
     print(a)
-    pass
+

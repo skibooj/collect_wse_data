@@ -8,8 +8,10 @@ requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 
 def main () -> None:
-
-    gpw.clear_data()
+    dowload_path = './dowloaded_data/'
+    merged_file_path = './merged_file/'
+    ready_files_path = ''
+    #gpw.clear_data()
     last_day = stockDB_manager.take_last_date('stock.stg_gpw')
     today = tools.current_date()
     list_to_download = tools.list_of_dates(last_day,today) #change to tools.list_of_dates

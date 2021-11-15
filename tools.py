@@ -2,8 +2,8 @@ import pandas as pd
 from datetime import datetime
 
 def current_date()-> str:
-  today = pd.to_datetime("today").strftime("%d-%m-%Y")
-  return today
+    today = pd.to_datetime("today").strftime("%d-%m-%Y")
+    return today
 
 
 def list_of_dates(period_start: str = None,period_end: str = None) -> list:
@@ -16,7 +16,17 @@ def list_of_dates(period_start: str = None,period_end: str = None) -> list:
     
     # freq argument is a constant because stock exchange work only in a workdays
     range_of_dates=pd.date_range(start=ps,end=pe,freq="B")
-    dates_to_download = range_of_dates.strftime("%d-%m-%Y").tolist() 
-    return dates_to_download
+    range_of_dates=pd.to_datetime(range_of_dates)
+    #dates_to_download = range_of_dates.strftime("%d-%m-%Y").tolist() 
+    return list(range_of_dates)
+
   
  
+
+
+
+
+if __name__ == "__main__":
+    a = list_of_dates(period_start='01/11/2021',period_end='15/11/2021')
+    print(len(a))
+      
