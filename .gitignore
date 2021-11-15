@@ -1,12 +1,11 @@
 D_data
+merged_files
+error_logs
 test*
-test.py
-*.xlsx
 todo.txt
 *.sql
 *.txt
-#Ignore all xlsx files
 *.xlsx
+*.csv
+database.ini
 
-#Ignore all pdf file
-*.pdf
