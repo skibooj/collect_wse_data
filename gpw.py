@@ -13,20 +13,6 @@ requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 
-def list_of_dates(period_start: str = None,period_end: str = None) -> list:
-    """
-    data shoud have format: dd/mm/yyyy
-    """
-    
-    ps = datetime.strptime(period_start, "%d/%m/%Y").strftime("%m-%d-%Y")
-    pe = datetime.strptime(period_end, "%d/%m/%Y").strftime("%m-%d-%Y")
-    
-    # freq argument is a constant because stock exchange work only in a workdays
-    range_of_dates=pd.date_range(start=ps,end=pe,freq="B")
-    dates_to_download = range_of_dates.strftime("%d-%m-%Y").tolist() 
-    return dates_to_download
-
-
 def gpw_download(
     dates_list: list=None,
     financial_instument: list=None):
