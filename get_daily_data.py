@@ -10,6 +10,7 @@ requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 def main () -> None:
     stock_name = 'GPW'
     dowloaded_files_path = './dowloaded_data/'
+    archived_files_path = './archived_file/'
     merged_files_path = './merged_file/'
     ready_files_path = ''   #complete
     stock_name = 'GPW'
@@ -24,8 +25,10 @@ def main () -> None:
     
     
     
-    #gpw.clear_data()
-    #gpw.move_to_archive()
+    tools.move_to_archive(output_file=archived_files_path,dir_name=dowloaded_files_path)
+    # if tools.check_archive(first=archived_files_path,second=dowloaded_files_path) ==False:
+    # sys.exit()
+    
     
     if len(dates_to_dowlonad) == 0:
         print('there is nothing to download')
