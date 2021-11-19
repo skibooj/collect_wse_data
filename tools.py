@@ -28,7 +28,15 @@ def move_to_archive(output_path:str=None,dir_name:str=None) -> None:
     shutil.make_archive(output_filename, 'zip', dir_name)
    
 
-def clear_directory():
+def remove_file(folder_dir:str=None):
+    path_to_check = Path(f'./{folder_dir}/')
+    list_of_folders = [x for x in path_to_check.iterdir() if x.is_dir()]
+
+    for folders in list_of_folders:
+        
+    files = folders.glob('*')
+    for f in files:
+        os.remove(f)
     pass
 
  
