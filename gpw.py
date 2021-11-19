@@ -88,6 +88,7 @@ def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_dir
 
     data = pd.read_csv(file_name)
     data['financial_inst'] = finacial_instrument
+    data['stock_name'] = 'GPW'
     data = data.rename(columns={'Data':'date',
                             'Nazwa':'symbol',
                             'Waluta':'currency',
@@ -105,7 +106,7 @@ def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_dir
                            })
     data['volume'] = data['volume'].apply(lambda x: x*1000)
     data['date']= pd.to_datetime(data['date'])
-    data = data.loc[:, ['date','financial_inst','symbol','currency','open',
+    data = data.loc[:, ['date','stock_name','financial_inst','symbol','currency','open',
                         'max','min','close','%change','quantity',
                         'number of transactions','volume','number of open positions',
                         'value of open positions','nominal price',]]
