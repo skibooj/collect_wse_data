@@ -36,7 +36,7 @@ def take_last_date(stock_name:str=None) -> str:
     con = connect_to_database()
     cur = con.cursor()
     
-    query =f"select distinct date from stock.{stock_name} order by date desc limit 1;"
+    query =f"select distinct date from {stock_name} order by date desc limit 1;"
     cur.execute(query)
     data = cur.fetchall()
     con.close()
@@ -60,7 +60,7 @@ def bulk_insert(file_path:str = None,table_name:str=None):
 
 def select_gpw_data() -> DataFrame:
     query = """
-    select * from stock.stg_gpw;
+    select * from stg_gpw;
     """
     con = connect_to_database()
     data = pd.read_sql_query(query,con)

@@ -1,6 +1,7 @@
 D_data
 merged_files
 error_logs
+archived_file
 test*
 todo.txt
 *.sql
@@ -8,4 +9,5 @@ todo.txt
 *.xlsx
 *.csv
 database.ini
+*.zip
 
