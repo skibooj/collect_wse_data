@@ -13,9 +13,7 @@ requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 
 
-def gpw_download(
-    dates_list: list=None,
-    financial_instument: list=None):
+def gpw_download(dates_list:list,financial_instument:list) -> None:
 
     for each_instrument in financial_instument:
         
@@ -37,15 +35,14 @@ def gpw_download(
             file_name = Path(final_directory, str(each_date + '.xls'))
 
             with file_name.open(mode ='wb') as output:
-                output.write(resp.content)
-                             
+                output.write(resp.content)                         
     pass
 
 
 def merge_data(folder_dir: str = None): 
     
     if folder_dir == None:
-        folder_dir = 'D_data'
+        folder_dir = Path('D_data')
 
     path_to_check = Path(f'./{folder_dir}/')
     list_of_folders = [x for x in path_to_check.iterdir() if x.is_dir()]
@@ -72,19 +69,13 @@ def merge_data(folder_dir: str = None):
         final_data.to_csv(Path('./merged_files/',final_file_path), index= False)
         
     pass 
-
-
-def detele_data(file_name: str=None) -> None:
-    if file_name == None:
-        file_name = "D_data"
-    
-    pass                                         
+                                        
 
 # test this function
 def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_directory: str=None) -> None:
- 
+    
     if final_directory ==None:
-        final_directory="./"
+        final_directory=Path('./ready_to_import/')
 
     data = pd.read_csv(file_name)
     data['financial_inst'] = finacial_instrument
