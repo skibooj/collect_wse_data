@@ -9,7 +9,7 @@ import shutil
 
 
 def get_list_of_file(dir_name:Path) -> list:
-    list_of_file = list(Path(dir_name).rglob( '*' ))
+    list_of_file = list(Path(dir_name).rglob( '*.*' ))
     return list_of_file
 
 

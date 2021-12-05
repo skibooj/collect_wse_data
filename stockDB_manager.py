@@ -29,14 +29,18 @@ def connect_to_database():
         print ("I am unable to connect to the database")
 
 
-def take_last_date(stock_name:str=None) -> str:
+def take_last_date(stock_name:str) -> str:
     """
     take last dowloaded date for certain stock name
     """
     con = connect_to_database()
     cur = con.cursor()
     
-    query =f"select distinct date from {stock_name} order by date desc limit 1;"
+    query =f"""select f.date
+		from fact_quotes as f join dim_stock as s on f.stock_id = s.stock_id
+		where s.name = '{stock_name}'
+		order by date desc 
+		limit 1; """
     cur.execute(query)
     data = cur.fetchall()
     con.close()
@@ -68,9 +72,9 @@ def select_gpw_data() -> DataFrame:
 
 
 def get_holidays(stock_name) -> DataFrame:
-    query = f"""select fact_stock_holidays.date from fact_stock_holidays inner join dim_stock
-                on fact_stock_holidays.stock_id = dim_stock.stock_id
-                where dim_stock.stock_name = '{stock_name}';"""
+    query = f"""select dim_holidays.date from dim_holidays inner join dim_stock
+                on dim_holidays.stock_id = dim_stock.stock_id
+                where dim_stock.name = '{stock_name}';"""
     con = connect_to_database()
     data = pd.read_sql_query(query,con)
     data = data.astype({'date': 'datetime64[ns]'})
@@ -81,6 +85,6 @@ def get_holidays(stock_name) -> DataFrame:
 
 if __name__ == "__main__":
     #demo
-    a = get_holidays('GPW')
+    a = take_last_date('GPW')
     print(a)
 

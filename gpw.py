@@ -32,14 +32,14 @@ def gpw_download(dates_list:list,financial_instument:list) -> None:
                       'date':each_date}
             
             resp = requests.get(base_url, params=url_params, verify=False)
-            file_name = Path(final_directory, str(each_date + '.xls'))
+            file_dir = Path(final_directory, str(each_date + '.xls'))
 
-            with file_name.open(mode ='wb') as output:
+            with file_dir.open(mode ='wb') as output:
                 output.write(resp.content)                         
     pass
 
 
-def merge_data(folder_dir: str = None): 
+def merge_data(folder_dir:str) -> None:
     
     if folder_dir == None:
         folder_dir = Path('D_data')
@@ -51,9 +51,9 @@ def merge_data(folder_dir: str = None):
     error_list = []
     current_date = pd.to_datetime("today").strftime("%Y-%m-%d")
 
-    for financial_instrument in list_of_folders:
+    for security_type in list_of_folders:
 
-        files_list = financial_instrument.glob('*.xls')
+        files_list = security_type.glob('*.xls')
 
         for file in files_list:
             try:
@@ -62,27 +62,38 @@ def merge_data(folder_dir: str = None):
                 print(f"{file} --- Error: there was an error")
                 error_list.append(file)
         
-        #>>financial_instrument.parts[1] output: instrument number
-        error_file_path = f"{current_date}_error_logs_{financial_instrument.parts[1]}.csv" 
-        final_file_path = f"{current_date}_merged_data_{financial_instrument.parts[1]}.csv"
-        pd.DataFrame(error_list).to_csv(Path('./error_logs/',error_file_path))
-        final_data.to_csv(Path('./merged_files/',final_file_path), index= False)
+        #>>security_type
+        # .parts[1] output: instrument number
+        error_file_name = f"{current_date}_error_logs_{security_type.parts[1]}.csv" 
+        merged_file_name = f"{current_date}_merged_data_{security_type.parts[1]}.csv"
+        
+        error_file_dir = Path('./error_logs/',error_file_name)
+        merged_file_dir = Path('./merged_files/',security_type.parts[1],merged_file_name)
+        
+
+        if not os.path.exists(Path(f'./merged_files/{security_type.parts[1]}')):
+            os.mkdir(Path(f'./merged_files/{security_type.parts[1]}'))
+        
+            
+        pd.DataFrame(error_list).to_csv(error_file_dir)
+        final_data.to_csv(merged_file_dir, index= False)
         
     pass 
                                         
 
 # test this function
-def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_directory: str=None) -> None:
+def import_preparation(file_dir: str, security_type
+:str, final_directory: str=None) -> None:
     
     if final_directory ==None:
         final_directory=Path('./ready_to_import/')
 
-    data = pd.read_csv(file_name)
-    data['financial_inst'] = finacial_instrument
-    data['stock_name'] = 'GPW'
+    data = pd.read_csv(file_dir)
+    
     data = data.rename(columns={'Data':'date',
                             'Nazwa':'symbol',
                             'Waluta':'currency',
+                            'ISIN':'isin',
                             'Kurs otwarcia':'open',
                             'Kurs max':'max',
                             'Kurs min':'min',
@@ -95,26 +106,22 @@ def gpw_data_preparation(file_name: str, finacial_instrument:str=None, final_dir
                             'Wartość otwartych pozycji':'value of open positions',
                             'Cena nominalna': 'nominal price',
                            })
-    data['volume'] = data['volume'].apply(lambda x: x*1000)
+    data['stock_name'] = 'GPW'
+    data['currency'] = 'PLN'
+    data['country'] = 'Poland'  
     data['date']= pd.to_datetime(data['date'])
-    data = data.loc[:, ['date','stock_name','financial_inst','symbol','currency','open',
+    data['volume'] = data['volume'].apply(lambda x: x*1000)
+    data['security_type'] = security_type
+
+    data = data.loc[:, ['date','stock_name','country','currency','security_type','symbol','isin','open',
                         'max','min','close','%change','quantity',
                         'number of transactions','volume','number of open positions',
                         'value of open positions','nominal price',]]
     
-    path_to_save = Path(final_directory,Path(file_name).stem + '_ready_to_import.csv')
+    path_to_save = Path(final_directory,Path(file_dir).stem + '_ready_to_import.csv')
     data.to_csv(path_to_save,index=False)
     pass
 
 
 if __name__ == "__main__":
-    #test
-    #dates = list_of_dates('01/01/2019','07/09/2021')
-    # instruments_to_download = ['10']
-    # gpw_download(dates,instruments_to_download)
-    # for element in instruments_to_download:
-    #     merge_data(element)
-    merge_data()
-
-
-
+    pass
