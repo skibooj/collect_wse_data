@@ -29,42 +29,36 @@ def main () -> None:
     today_date = tools.current_date()
     dates_rage = tools.list_of_dates(last_date_in_db,today_date)
     holidays = stockDB_manager.get_holidays(stock_name)
-    
     dates_to_download = [day for day in dates_rage if day not in holidays]
     
-
     if len(dates_to_download) == 0:
         print('there is nothing to download')
         sys.exit()
     else:
         print(f"{len(dates_to_download)} files will be downloaded")
 
-
     dates_to_download = [day.strftime('%m-%d-%Y') for day in dates_to_download]
-    # compare already dowload files with files to dowload to avoid unecessery dowloading
-
-
+    #TODO: compare already dowload files with files to dowload to avoid unecessery dowloading
     gpw.gpw_download(dates_to_download,security_type)
-    gpw.merge_data()
-
+    dowloanded_folders = tools.get_folders_from_dir(dowloaded_files_path)
+   
+    for folder in dowloanded_folders:
+        gpw.merge_data(folder)
+    
     # merged_files = tools.get_list_of_file(merged_files_path)
     # for file in merged_files:
     #     security_type = file.parts[1]
     #     gpw.import_preparation(file_dir=file,security_type=security_type,final_directory=ready_files_path)
-
-
-     
-    # data_is_imported = False
-    # while data_is_imported == False:
+    # data_was_dowloaded = false
     #     ready_files = tools.get_list_of_file(ready_files_path)
     #     for file in ready_files:
-    #         stockDB_manager.bulk_insert(file_path=file.absolute(),table_name='stg_gpw')
-    #         data_is_imported = True
-    #     stockDB_manager.refresh_dim()
-    #     stockDB_manager.load_to_main_table()
-    #          
-
-    # if data_was_dowloaded == True and data_is_imported == True:
+    #         try:
+    #           stockDB_manager.bulk_insert(file_path=file.absolute(),table_name='stg_gpw')
+    #           stockDB_manager.refresh_dim(stock_name='GPW')
+    #           stockDB_manager.load_to_main_table()
+    #           stockDB_manager.refresh_data_marts()
+    #           data_was_dowloaded = True
+    # if data_was_dowloaded == True:
     #     output_filename=Path(archive_file_name,str(f"arch_{datetime.now().strftime('%Y%d%m_%H%M%S')}"))
     #     shutil.make_archive(output_filename, 'zip', dowloaded_files_path)
     #     tools.remove_file(folder_dir=dowloaded_files_path)
