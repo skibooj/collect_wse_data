@@ -5,6 +5,8 @@ import psycopg2
 import configparser
 import pandas as pd
 import numpy as np
+
+
 def config(section,filename='database.ini',):
     parser = configparser.ConfigParser()
     parser.read(filename)
@@ -15,7 +17,6 @@ def config(section,filename='database.ini',):
             db[param[0]] = param[1]
     else:
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
-        
     return db
 
 
@@ -61,14 +62,33 @@ def bulk_insert(file_path:str = None,table_name:str=None):
     con.close()
     pass
 
-
-def select_gpw_data() -> DataFrame:
-    query = """
-    select * from stg_gpw;
-    """
+def load_to_main_table(staging_table:str):
     con = connect_to_database()
-    data = pd.read_sql_query(query,con)
-    return data
+    cur = con.cursor()   
+    query = f"""
+            INSERT INTO public.fact_quotes(
+            date, stock_id, security_id, open, max, min, close, quantity, num_of_trans, volume)
+            select
+                stg.date
+                ,stc.stock_id
+                ,sec.security_id
+                ,stg.open
+                ,stg.max
+                ,stg.min
+                ,stg.close
+                ,stg.quantity
+                ,stg.num_of_trans
+                ,stg.volume
+                from {staging_table} as stg
+            left JOIN dim_stock as stc on stg.stock_name = stc.name
+            left JOIN dim_securities as sec on stg.isin = sec.isin and stg.symbol = sec.symbol
+            """
+    cur.execute(query)
+    con.close()
+    pass
+
+
+
 
 
 def get_holidays(stock_name) -> DataFrame:
@@ -81,10 +101,26 @@ def get_holidays(stock_name) -> DataFrame:
     return list(data['date'])
 
 
+def execute_query(query:str):
+    con = connect_to_database()
+    cur = con.cursor()
+    cur.execute(query)
+    data = cur.fetchall()
+    con.close()
+    print(data)
+    pass
+
+
+def clear_table(table_name:str):
+    con = connect_to_database()
+    cur = con.cursor()
+    query = f"delete from {table_name}"
+    cur.execute(query)
+    con.close()
+    pass
+
 
 
 if __name__ == "__main__":
-    #demo
-    a = take_last_date('GPW')
-    print(a)
+    execute_query(query="select count(*) from stg_gpw;")
 

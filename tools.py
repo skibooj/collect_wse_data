@@ -12,6 +12,9 @@ def get_list_of_file(dir_name:Path) -> list:
     list_of_file = list(Path(dir_name).rglob( '*.*' ))
     return list_of_file
 
+def get_list_of_folders(dir_name:Path) -> list:
+    list_of_folders = list(dir_name.glob('./*'))
+    return list_of_folders
 
 def current_date(format=None)-> str:
     if format == None:
@@ -34,20 +37,11 @@ def list_of_dates(period_start: str = None,period_end: str = None) -> list:
     return range_of_dates
 
 
-
-def remove_file(folder_dir:Path):
-    path_to_check = Path(f'./{folder_dir}/')
-    list_of_folders = [x for x in path_to_check.iterdir() if x.is_dir()]
-    for folder in list_of_folders:   
-        files = folder.glob('*')
-        for f in files:
-            os.remove(f)
-        pass
-
+def remove_files(folder_dir:Path):
+    files = glob.glob(f"{folder_dir}/*")
+    for f in files:
+        os.remove(f)
+    pass
 
 if __name__ == "__main__":
-    dowloaded_files_path = Path('./D_data/')
-    archived_files_path = Path('/archived_file/archive.zip')
-    #archive_dowloaded_data(source=dowloaded_files_path,destination=archived_files_path)
-    print(get_list_of_file(dowloaded_files_path))
     pass
