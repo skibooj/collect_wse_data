@@ -1,13 +1,12 @@
 D_data
 merged_files
-sql_scripts/*
+sql_scripts
 ready_to_import
 error_logs
 archived_file
 test*
 todo.txt
 database.ini
-
 *.ipynb
 *.sql
 *.txt
