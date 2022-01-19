@@ -7,7 +7,6 @@ archived_file
 test*
 todo.txt
 database.ini
-
 *.ipynb
 *.sql
 *.txt
