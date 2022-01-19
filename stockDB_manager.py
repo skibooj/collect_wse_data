@@ -119,7 +119,14 @@ def clear_table(table_name:str):
     con.close()
     pass
 
-
+def get_data_to_df(stock_name:str) -> DataFrame:
+    query = f"""select dim_holidays.date from dim_holidays inner join dim_stock
+                on dim_holidays.stock_id = dim_stock.stock_id
+                where dim_stock.name = '{stock_name}';"""
+    con = connect_to_database()
+    data = pd.read_sql_query(query,con)
+    
+    return data
 
 if __name__ == "__main__":
     execute_query(query="select count(*) from stg_gpw;")
